@@ -1,6 +1,7 @@
 import numpy as np
 import itertools
 
+
 def fuzzify_max_pertinence(pertinence):
     """ Fuzzify values based on  maximum pertinence
 
@@ -21,14 +22,14 @@ def generate_rule(pertinence):
     Returns:
        rule: Fuzzy logic rule
     """
-    antecedent = [fuzzify_max_pertinence(p) for p in pertinence[1:len(pertinence)]]
-    consequent = fuzzify_max_pertinence(pertinence[len(pertinence)])
+    antecedent = [fuzzify_max_pertinence(p) for p in pertinence[0:(len(pertinence)-1)]]
+    consequent = fuzzify_max_pertinence(pertinence[len(pertinence)-1])
     rule = [antecedent, consequent]
 
     return rule
 
 
-def init_rule_base(fuzzy_sets,order):
+def init_rule_base(fuzzy_sets, order):
     """ Generates a rule given a list of prtinence lists
 
     Args:
@@ -38,7 +39,7 @@ def init_rule_base(fuzzy_sets,order):
         rule_base: rule base (all possible antecedents + empty consequents)
     """
 
-    antecedents = list(itertools.product(fuzzy_sets, order))
+    antecedents = list(itertools.product(fuzzy_sets, repeat=order))
     consequents = []
     for i in range(len(antecedents)):
         consequents.append(set())
@@ -63,14 +64,29 @@ def add_rule(rule_base, rule, nsets, order):
     consequents = rule_base[1]
 
     # Find rule index
-    index = np.dot([nsets**o for o in np.arange(order-1, -1, -1)], np.array(rule[0]))
+    index = np.dot([nsets ** o for o in np.arange(order - 1, -1, -1)], np.array(rule[0]))
 
     # Update consequent
     consequents[index].add(rule[1])
 
     # Return the updated rule base
-    rule_base = [antecedents, consequents] # Not sure if this is needed
+    rule_base = [antecedents, consequents]  # Not sure if this is needed
     return rule_base
 
 
+def print_rule_base(rule_base):
 
+    antecedents = rule_base[0]
+    consequents = rule_base[1]
+
+    for i in range(len(antecedents)):
+        s = ''
+        for set_id in antecedents[i]:
+            s = s + 'A{} '.format(set_id)
+
+        s = s + '-> '
+
+        for set_id in consequents[i]:
+            s = s + 'A{} '.format(set_id)
+
+        print(s)
