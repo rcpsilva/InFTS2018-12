@@ -54,7 +54,7 @@ def add_rule(rule_base, rule, nsets, order):
 
     Args:
         rule_base: Rule base
-        rule: The rule to added
+        rule: The rule to added rule[0] = antencedent , rule[1] = consequent
         nsets: Number of fuzzy sets
         order: FTS order
     Returns:

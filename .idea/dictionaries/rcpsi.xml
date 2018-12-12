@@ -2,7 +2,9 @@
   <dictionary name="rcpsi">
     <words>
       <w>consequents</w>
+      <w>defuzzify</w>
       <w>nsets</w>
+      <w>pertinences</w>
     </words>
   </dictionary>
 </component>
