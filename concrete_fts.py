@@ -16,7 +16,6 @@ class ConcreteFTS(FTS):
         self.ub = ub
         self.fuzzy_sets = np.arange(self.nsets)
         self.rule_base = rbm.init_rule_base(self.fuzzy_sets, self.order)
-        self.window = []  # Stores the last "order" data
         self.partitions = pu.generate_t_partitions(nsets, lb, ub)
         self.alpha_cut = 0;
 

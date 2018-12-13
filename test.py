@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import scipy.signal as ss
 
 #Fts order
-order = 1
+order = 3
 
 # Gatter sample data
 n_samples = 1000
@@ -19,7 +19,7 @@ train = data[0:(t_s+1)]  # 0:400
 test = data[t_s-order:]  # 397:500
 
 # Generate fts
-fts = ConcreteFTS(nsets=7, order=order, lb=np.min(data)*1.5, ub=np.max(data)*1.5)
+fts = ConcreteFTS(nsets=24, order=order, lb=np.min(data)*1.5, ub=np.max(data)*1.5)
 print(fts.partitions)
 fts.fit(train)
 rbm.print_rule_base(fts.rule_base)
