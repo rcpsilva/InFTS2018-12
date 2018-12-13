@@ -3,7 +3,7 @@ from itertools import product
 import numpy as np
 
 
-def forecast_weighted_average_t_sets(x, rule_base, partitions, nsets, order):
+def forecast_weighted_average_t_sets(x, rule_base, alpha_cut, partitions, nsets, order):
     """ Generates triangular and equally spaced partitions
 
     Args:
@@ -29,7 +29,7 @@ def forecast_weighted_average_t_sets(x, rule_base, partitions, nsets, order):
         x_sets = []  # List of valid sets (pertinence > 0)
         x_ps = []  # List of pertinences with respect to the valid sets
         for i in range(len(p)):
-            if p[i] > 0:
+            if p[i] > alpha_cut:
                 x_sets.append(i)
                 x_ps.append(p[i])
         l_sets.append(x_sets)
@@ -38,7 +38,7 @@ def forecast_weighted_average_t_sets(x, rule_base, partitions, nsets, order):
     # Find rules with pertinence > 0
     rules = list(product(*l_sets))
 
-    print(rules)
+    # print(rules)
 
     consequents = []
     for r in rules:

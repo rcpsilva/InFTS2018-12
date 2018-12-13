@@ -80,13 +80,14 @@ def print_rule_base(rule_base):
     consequents = rule_base[1]
 
     for i in range(len(antecedents)):
-        s = ''
-        for set_id in antecedents[i]:
-            s = s + 'A{} '.format(set_id)
+        if consequents[i]:
+            s = ''
+            for set_id in antecedents[i]:
+                s = s + 'A{} '.format(set_id)
 
-        s = s + '-> '
+            s = s + '-> '
 
-        for set_id in consequents[i]:
-            s = s + 'A{} '.format(set_id)
+            for set_id in consequents[i]:
+                s = s + 'A{} '.format(set_id)
 
-        print(s)
+            print(s)

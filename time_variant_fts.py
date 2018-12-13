@@ -6,7 +6,7 @@ import numpy as np
 from forecast_funcs import forecast_weighted_average_t_sets
 
 
-class ConcreteFTS(FTS):
+class TimeVariantFTS(FTS):
 
     def __init__(self, nsets, order, lb, ub):
 
@@ -35,8 +35,5 @@ class ConcreteFTS(FTS):
             rbm.add_rule(self.rule_base, rule, self.nsets, self.order)
 
     def predict(self, x):
-        predictions = []
-        for i in range(len(x)):
-            predictions.append(forecast_weighted_average_t_sets(x[i:(i+self.order)], self.rule_base, self.alpha_cut,
-                                                                self.partitions, self.nsets, self.order))
-        return predictions
+        return forecast_weighted_average_t_sets(x, self.rule_base, self.alpha_cut,
+                                                self.partitions, self.nsets, self.order)
