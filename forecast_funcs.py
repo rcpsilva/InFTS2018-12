@@ -55,4 +55,8 @@ def forecast_weighted_average_t_sets(x, rule_base, alpha_cut, partitions, nsets,
 
     pertinences = [np.prod(e) for e in list(product(*l_ps))]
 
-    return np.dot(consequents, pertinences) / np.sum(pertinences)
+    forecast = x[len(x) - 1]
+    if consequents:
+        forecast = np.dot(consequents, pertinences) / np.sum(pertinences)
+
+    return forecast
