@@ -4,11 +4,12 @@ import numpy as np
 
 
 def forecast_weighted_average_t_sets(x, rule_base, alpha_cut, partitions, nsets, order):
-    """ Generates triangular and equally spaced partitions
+    """ Produces a forecast value given an input x and the FTS parameters
 
     Args:
         x:
         rule_base:
+        alpha_cut:
         partitions:
         nsets:
         order:

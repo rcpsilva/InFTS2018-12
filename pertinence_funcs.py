@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def t_pertinence(x, partition):
     """ Computes the pertinence of x with respect to a triangular fuzzy set given parameterized by partition
 
@@ -39,3 +42,14 @@ def t_pertinence_list(lx, partitions):
         pertinence_list.append(pertinence)
 
     return pertinence_list
+
+
+def fuzzify_x_list_t(x, partitions):
+
+    f_list = []
+
+    for xi in x:
+        p_list = t_pertinence_list([xi], partitions)
+        f_list.append(np.argmax(p_list[0]))
+
+    return f_list
