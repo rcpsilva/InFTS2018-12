@@ -13,7 +13,6 @@ old_centers = [p[1] for p in old_partitions]
 # 1) Compute the new partitions
 new_partitions = pu.generate_t_partitions(3, 1, 4)
 
-
 # 2) Verify the pertinence of the old sets centers with respect to the new partitions
 f = fuzzify_x_list_t(old_centers, new_partitions)
 
@@ -23,13 +22,13 @@ up_partitions = sorted(up_partitions, key=lambda n_p: n_p[1])
 
 # 4) Compute the mappings required to update the rule base
 f = fuzzify_x_list_t(old_centers, up_partitions)
-map_old_new = [[i, f[i]] for i in range(len(f)) if i != f[i]]
+map_old_new = f
 
 print(map_old_new)
 
-x = np.arange(-5, 10, 0.01)
-for i in range(len(up_partitions)):
-    y = [pf.t_pertinence(xi, up_partitions[i]) for xi in x]
-    plt.plot(x, y)
-
-plt.show()
+# x = np.arange(-5, 10, 0.01)
+# for i in range(len(up_partitions)):
+#     y = [pf.t_pertinence(xi, up_partitions[i]) for xi in x]
+#     plt.plot(x, y)
+#
+# plt.show()

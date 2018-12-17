@@ -1,5 +1,6 @@
 import numpy as np
 import itertools
+from operator import eq
 
 
 def fuzzify_max_pertinence(pertinence):
@@ -74,14 +75,46 @@ def add_rule(rule_base, rule, nsets, order):
     return rule_base
 
 
-def update_rule_base(rule_base,map_old_new, fuzzy_sets, order):
+def update_rule_base(rule_base, map_old_new, new_fuzzy_sets, order):
+    """ Updates a rule_base
 
-    new_rule_base = init_rule_base(fuzzy_sets, order)
+    Args:
+        rule_base:
+        map_old_new:
+        new_fuzzy_sets:
+        order:
+    Returns:
+        new_rule_base:
 
-    # For each rule in in rule_base, find the corresponding rule in new_rule_base
-    # Copy and Translate consequent
+    """
 
-    return new_rule_base
+    if any(list(map(eq, map_old_new, list(range(len(map_old_new)))))):  # Check if any translation is needed
+
+        new_rule_base = init_rule_base(new_fuzzy_sets, order)
+
+        # For each rule in in rule_base, find the corresponding rule in new_rule_base
+        antecedents = rule_base[0]
+        consequents = rule_base[1]
+
+        # Copy and Translate consequent
+        for i in range(len(antecedents)):
+            if consequents[i]:
+                # translate antecedent
+                a = list(antecedents[i])
+                t_a = [map_old_new[s] for s in a]
+
+                # translate  consequent
+                c = list(consequents[i])
+                t_c = set([map_old_new[s] for s in c])
+
+                # Plug consequent to the new rule base
+                index = np.dot([len(new_fuzzy_sets) ** o for o in np.arange(order - 1, -1, -1)], np.array(t_a))
+                new_rule_base[1][index] = t_c
+
+        return new_rule_base
+
+    else:
+        return rule_base
 
 
 def print_rule_base(rule_base):

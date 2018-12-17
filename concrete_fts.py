@@ -35,7 +35,7 @@ class ConcreteFTS(FTS):
 
     def predict(self, x):
         predictions = []
-        for i in range(len(x)):
+        for i in range(len(x)-self.order):
             predictions.append(forecast_weighted_average_t_sets(x[i:(i+self.order)], self.rule_base, self.alpha_cut,
                                                                 self.partitions, self.nsets, self.order))
         return predictions
