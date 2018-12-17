@@ -1,6 +1,7 @@
 import pertinence_funcs as pf
 from itertools import product
 import numpy as np
+import warnings
 
 
 def forecast_weighted_average_t_sets(x, rule_base, alpha_cut, partitions, nsets, order):
@@ -18,7 +19,7 @@ def forecast_weighted_average_t_sets(x, rule_base, alpha_cut, partitions, nsets,
     """
 
     if len(x) < order:
-        print('Input size less than Order. No forecast returned')
+        warnings.warn('Input size less than Order. No forecast returned')
         return None
 
     # Find matching rules

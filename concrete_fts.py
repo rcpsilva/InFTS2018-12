@@ -17,7 +17,7 @@ class ConcreteFTS(FTS):
         self.fuzzy_sets = np.arange(self.nsets)
         self.rule_base = rbm.init_rule_base(self.fuzzy_sets, self.order)
         self.partitions = pu.generate_t_partitions(nsets, lb, ub)
-        self.alpha_cut = 0;
+        self.alpha_cut = 0
 
     def fit(self, data):
 

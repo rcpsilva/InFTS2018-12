@@ -74,7 +74,24 @@ def add_rule(rule_base, rule, nsets, order):
     return rule_base
 
 
+def update_rule_base(rule_base,map_old_new, fuzzy_sets, order):
+
+    new_rule_base = init_rule_base(fuzzy_sets, order)
+
+    # For each rule in in rule_base, find the corresponding rule in new_rule_base
+    # Copy and Translate consequent
+
+    return new_rule_base
+
+
 def print_rule_base(rule_base):
+    """ Prints a rule base
+
+    Args:
+        rule_base: Rule base
+    Returns:
+
+    """
 
     antecedents = rule_base[0]
     consequents = rule_base[1]

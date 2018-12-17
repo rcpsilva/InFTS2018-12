@@ -51,7 +51,7 @@ def fuzzify_x_list_t(x, partitions):
             x: list point
             partitions: list triangular fuzzy sets partitions
         Returns:
-            f_list: list of fuzzyfied values
+            f_list: list of fuzzified values
     """
 
     f_list = []
