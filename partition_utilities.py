@@ -10,7 +10,7 @@ def generate_t_partitions(n, lb, ub):
         partitions: list of triangular partitions
     """
 
-    delta = (ub-lb)/n
+    delta = (ub-lb)/(n-1)
     partitions = [[(i*delta+lb)-delta, i*delta+lb, (i*delta+lb)+delta] for i in range(n)]
 
     return partitions
