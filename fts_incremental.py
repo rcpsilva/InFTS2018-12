@@ -8,9 +8,9 @@ from pertinence_funcs import fuzzify_x_list_t
 
 
 class IncrementalMuSigmaFTS(FTS):
-    """ Implements a time variant FTS for Streaming data
+    """ Implements an incremental FTS for Streaming data
 
-       """
+    """
 
     def __init__(self, nsets, order):
 
@@ -23,16 +23,21 @@ class IncrementalMuSigmaFTS(FTS):
         self.window = []  # Stores the last "order" data
         self.partitions = None
         self.alpha_cut = 0
-        self.window_size = order
+        self.window_size = order+1
 
-        self.mu = None
-        self.sigma = None
+        self.mu = 0
+        self.sigma = 0
         self.n = 0  # Number of samples
         self.sigma_multiplier = 2.698
 
     def fit(self, data):
 
-        old_partitions = self.partitions[:]
+        if self.partitions:
+            old_partitions = self.partitions[:]
+        else:
+            old_partitions = pu.generate_t_partitions(self.nsets,
+                                                      self.mu - self.sigma * self.sigma_multiplier,
+                                                      self.mu + self.sigma * self.sigma_multiplier)
 
         # 1) Compute the new partitions
         self.partitions = pu.generate_t_partitions(self.nsets,
@@ -66,7 +71,7 @@ class IncrementalMuSigmaFTS(FTS):
 
     def predict(self, x):
 
-        if len(self.window) < self.window_size:  # If there is not enough data, use persistence
+        if len(self.window) < self.window_size:  # If there is not enough data, persist
             self.window.append(x)
             self.n = self.n+1
             self.update_mu_and_sigma(x)
@@ -90,5 +95,5 @@ class IncrementalMuSigmaFTS(FTS):
         self.mu = old_mu + (x - old_mu) / self.n
 
         # Update standard deviation
-        s = (self.sigma ** 2 * self.n) + (x - old_mu)(x-self.mu)
+        s = (self.sigma ** 2 * self.n) + (x - old_mu)*(x-self.mu)
         self.sigma = np.sqrt(s / self.n)

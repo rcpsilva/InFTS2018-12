@@ -1,25 +1,31 @@
+from tkinter.dnd import Icon
+
 import rule_base_management as rbm
-from fts_concrete import ConcreteFTS
 import pertinence_funcs as pf
-from fts_time_variant import TimeVariantFTS
 import numpy as np
 import matplotlib.pyplot as plt
+from fts_concrete import ConcreteFTS
+from fts_time_variant import TimeVariantFTS
+from fts_incremental import IncrementalMuSigmaFTS
+from fts_incremental_rule_deletion import IncMuSigmaRuleDeletionFTS
+
 import scipy.signal as ss
 
 #Fts order
 order = 3
+nsets = 7
 window_size = 100
 
 # Gather sample data
 n_samples = 300
 
 
-x = np.linspace(-np.pi, 5*np.pi, n_samples)
-data = 0 + np.sin(x) # + np.random.normal(0, 0.1, len(x))
-
+x = np.linspace(-np.pi, 10*np.pi, n_samples)
+data = 3 + np.sin(x)*x  # + np.random.normal(0, 0.1, len(x))
+data = np.concatenate((data[1:100], data + 100))
 # data = np.random.normal(0, 1, n_samples)
 # data = ss.medfilt(data, 101)
-t = np.arange(n_samples)
+t = np.arange(len(data))
 
 
 # # Generate fts
@@ -34,15 +40,28 @@ t = np.arange(n_samples)
 
 multiplier = 2.698
 data_range = np.max(data) - np.min(data)
-cfts = ConcreteFTS(nsets=7, order=order, lb=np.mean(data) - multiplier*np.std(data),
+cfts = ConcreteFTS(nsets=nsets, order=order, lb=np.mean(data) - multiplier*np.std(data),
                    ub=np.mean(data) + multiplier*np.std(data))
 cfts.fit(data[:window_size])
 cfts_forecast = cfts.predict(data)
 
-pf.plot_pertinence(cfts.partitions)
-plt.plot(t, data)
-plt.plot(np.arange(order+1, len(t)+1), cfts_forecast)
-#plt.plot(t[1:], forecasts[:(len(forecasts)-1)])
+
+# ifts = IncrementalMuSigmaFTS(nsets=nsets, order=order)
+ifts = IncMuSigmaRuleDeletionFTS(nsets=nsets, order=order)
+ifts_forecast = []
+samples_so_far = 0
+for d in data:
+    samples_so_far = samples_so_far + 1
+    ifts_forecast.append(ifts.predict(d))
+    if ifts.partitions:
+        plt.clf()
+        pf.plot_pertinence(ifts.partitions)
+        plt.plot(t, data)
+        plt.plot(np.arange(1, samples_so_far+1), ifts_forecast)
+        plt.pause(0.01)
+
+#plt.plot(t, data)
+#plt.plot(np.arange(order + 1, len(t) + 1), cfts_forecast)
 plt.show()
 
 

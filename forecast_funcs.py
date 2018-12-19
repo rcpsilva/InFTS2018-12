@@ -4,6 +4,36 @@ import numpy as np
 import warnings
 
 
+def find_unappropriate_rules(x, alpha_cut, partitions, nsets, order):
+    un_rules = []
+
+    # Find matching rules
+    pertinence_list = pf.t_pertinence_list(x, partitions)
+
+    l_sets = []
+    l_ps = []
+    for p in pertinence_list:
+        x_sets = []  # List of valid sets (pertinence > 0)
+        x_ps = []  # List of pertinences with respect to the valid sets
+        for i in range(len(p)):
+            if p[i] > alpha_cut:
+                x_sets.append(i)
+                x_ps.append(p[i])
+        l_sets.append(x_sets)
+        l_ps.append(x_ps)
+
+    # Find rules with pertinence > 0
+    rules = list(product(*l_sets))
+
+    for r in rules:
+        #  Find rule in the rule base
+        #  Find rule index
+        index = np.dot([nsets ** o for o in np.arange(order - 1, -1, -1)], np.array(r))
+        un_rules.append(index)
+
+    return un_rules
+
+
 def forecast_weighted_average_t_sets(x, rule_base, alpha_cut, partitions, nsets, order):
     """ Produces a forecast value given an input x and the FTS parameters
 
