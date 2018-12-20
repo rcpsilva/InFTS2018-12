@@ -12,7 +12,7 @@ class IncrementalMuSigmaFTS(FTS):
 
     """
 
-    def __init__(self, nsets, order):
+    def __init__(self, nsets, order, bound_type):
 
         self.nsets = nsets
         self.order = order
@@ -30,19 +30,28 @@ class IncrementalMuSigmaFTS(FTS):
         self.n = 0  # Number of samples
         self.sigma_multiplier = 2.698
 
+        self.min_val = 0
+        self.max_val = 0
+
+        self.bound_type = bound_type
+
     def fit(self, data):
+
+        if self.bound_type == 'min-max':
+            data_range = self.max_val - self.min_val
+            lb = self.min_val - data_range*0.5
+            ub = self.max_val + data_range * 0.5
+        else:  # self.bound_type == 'mu_sigma'
+            lb = self.mu - self.sigma * self.sigma_multiplier
+            ub = self.mu + self.sigma * self.sigma_multiplier
 
         if self.partitions:
             old_partitions = self.partitions[:]
         else:
-            old_partitions = pu.generate_t_partitions(self.nsets,
-                                                      self.mu - self.sigma * self.sigma_multiplier,
-                                                      self.mu + self.sigma * self.sigma_multiplier)
+            old_partitions = pu.generate_t_partitions(self.nsets,lb,ub)
 
         # 1) Compute the new partitions
-        self.partitions = pu.generate_t_partitions(self.nsets,
-                                                   self.mu - self.sigma*self.sigma_multiplier,
-                                                   self.mu + self.sigma*self.sigma_multiplier)
+        self.partitions = pu.generate_t_partitions(self.nsets,lb,ub)
 
         # 2) Verify the pertinence of the old sets centers with respect to the new partitions
         old_centers = [p[1] for p in old_partitions]
@@ -75,6 +84,7 @@ class IncrementalMuSigmaFTS(FTS):
             self.window.append(x)
             self.n = self.n+1
             self.update_mu_and_sigma(x)
+            self.update_min_and_max(x)
             return x
         else:
             self.window.pop(0)
@@ -82,6 +92,7 @@ class IncrementalMuSigmaFTS(FTS):
 
             self.n = self.n + 1
             self.update_mu_and_sigma(x)
+            self.update_min_and_max(x)
 
             self.fit(self.window)
             forecast = forecast_weighted_average_t_sets(self.window[len(self.window) - self.order:], self.rule_base,
@@ -97,3 +108,11 @@ class IncrementalMuSigmaFTS(FTS):
         # Update standard deviation
         s = (self.sigma ** 2 * self.n) + (x - old_mu)*(x-self.mu)
         self.sigma = np.sqrt(s / self.n)
+
+    def update_min_and_max(self, x):
+
+        if x < self.min_val:
+            self.min_val = x
+
+        if x > self.max_val:
+            self.max_val = x

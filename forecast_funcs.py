@@ -90,5 +90,7 @@ def forecast_weighted_average_t_sets(x, rule_base, alpha_cut, partitions, nsets,
     forecast = x[len(x) - 1]
     if consequents:
         forecast = np.dot(consequents, pertinences) / np.sum(pertinences)
+    else:
+        print('persistence')
 
     return forecast

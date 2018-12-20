@@ -11,25 +11,31 @@ class TimeVariantFTS(FTS):
 
     """
 
-    def __init__(self, nsets, order, lb, ub, window_size):
+    def __init__(self, nsets, order, window_size, bound_type='min-max'):
 
         self.nsets = nsets
         self.order = order
-        self.lb = lb
-        self.ub = ub
         self.fuzzy_sets = np.arange(self.nsets)
         self.rule_base = rbm.init_rule_base(self.fuzzy_sets, self.order)
         self.window = []  # Stores the last "order" data
-        self.partitions = pu.generate_t_partitions(nsets, lb, ub)
+        self.partitions = []
         self.alpha_cut = 0
         self.window_size = window_size
+
+        self.bound_type = bound_type
 
     def fit(self, data):
         # Resets the rule base
         self.rule_base = rbm.init_rule_base(self.fuzzy_sets, self.order)
 
         # Regenerate partitions
-        self.partitions = pu.generate_t_partitions(self.nsets, np.min(data)*1.5, np.max(data)*1.5)
+        data_range = np.max(data) - np.min(data)
+        if self.bound_type == 'min-max':
+            self.partitions = pu.generate_t_partitions(self.nsets, np.min(data) - data_range*0.5,
+                                                       np.max(data) + data_range*0.5)
+        else:  # self.bound_type == 'mu-sigma'
+            self.partitions = pu.generate_t_partitions(self.nsets, np.mean(data) - np.std(data) * self.sigma_multiplier,
+                                                       np.mean(data) + np.std(data) * self.sigma_multiplier)
 
         # Populate the rule base
         for i in range(len(data)-self.order):
