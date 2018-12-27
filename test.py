@@ -9,6 +9,7 @@ from fts_time_variant import TimeVariantFTS
 from fts_incremental import IncrementalMuSigmaFTS
 from fts_incremental_rule_deletion import IncMuSigmaRuleDeletionFTS
 from fts_time_variant_adaptive import TimeVariantAdaptiveFTS
+from fts_stream import StreamAdaptiveWindowFTS
 
 import scipy.signal as ss
 
@@ -48,8 +49,9 @@ cfts.fit(data[:window_size])
 cfts_forecast = cfts.predict(data)
 
 
-ifts = IncMuSigmaRuleDeletionFTS(nsets=nsets, order=order, deletion=False, bound_type='mu-sigma')
+# ifts = IncMuSigmaRuleDeletionFTS(nsets=nsets, order=order, deletion=False, bound_type='mu-sigma')
 # ifts = TimeVariantAdaptiveFTS(nsets=nsets, order=order, bound_type='mu-sigma')
+ifts = StreamAdaptiveWindowFTS(nsets=nsets, order=order, bound_type='mu-sigma', update_type='translate', deletion=False)
 # ifts = TimeVariantAdaptiveFTS(nsets=nsets, order=order, bound_type='min-max')
 ifts_forecast = []
 samples_so_far = 0
