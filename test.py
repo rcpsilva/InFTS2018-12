@@ -48,9 +48,9 @@ cfts.fit(data[:window_size])
 cfts_forecast = cfts.predict(data)
 
 
-# ifts = IncrementalMuSigmaFTS(nsets=nsets, order=order)
-# ifts = IncMuSigmaRuleDeletionFTS(nsets=nsets, order=order, deletion=False, bound_type='mu-sigma')
-ifts = TimeVariantAdaptiveFTS(nsets=nsets, order=order, bound_type='mu-sigma')
+ifts = IncMuSigmaRuleDeletionFTS(nsets=nsets, order=order, deletion=False, bound_type='mu-sigma')
+# ifts = TimeVariantAdaptiveFTS(nsets=nsets, order=order, bound_type='mu-sigma')
+# ifts = TimeVariantAdaptiveFTS(nsets=nsets, order=order, bound_type='min-max')
 ifts_forecast = []
 samples_so_far = 0
 count = 1
