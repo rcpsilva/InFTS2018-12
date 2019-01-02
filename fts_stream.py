@@ -145,7 +145,6 @@ class StreamAdaptiveWindowFTS(FTS):
 
         # 6) Add new rule
         # Get pertinences
-        print('LEN: {}'.format(len(data)))
         pertinence_list = pf.t_pertinence_list(data[(len(data)-self.order-1):], self.partitions)
 
         # Build rule

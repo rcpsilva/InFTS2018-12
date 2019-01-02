@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e0c89d7d-e2bc-4bb0-a9a4-9ce46de1cbb5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/fts_stream.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fts_stream.py" beforeDir="false" afterPath="$PROJECT_DIR$/fts_stream.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fts_stream.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="148" column="51" selection-start-line="148" selection-start-column="47" selection-end-line="148" selection-end-column="51" />
+            <state relative-caret-position="91">
+              <caret line="147" column="96" lean-forward="true" selection-start-line="147" selection-start-column="96" selection-end-line="147" selection-end-column="96" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -71,11 +69,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="57" column="9" lean-forward="true" selection-start-line="57" selection-start-column="9" selection-end-line="57" selection-end-column="9" />
+            <state relative-caret-position="42">
+              <caret line="67" column="70" selection-start-line="67" selection-start-column="70" selection-end-line="67" selection-end-column="70" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -142,16 +140,16 @@
         <option value="$PROJECT_DIR$/fts_incremental.py" />
         <option value="$PROJECT_DIR$/fts_time_variant_adaptive.py" />
         <option value="$PROJECT_DIR$/fts_time_variant.py" />
-        <option value="$PROJECT_DIR$/fts_stream.py" />
         <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/fts_stream.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="10" />
-    <option name="y" value="20" />
-    <option name="width" value="1347" />
-    <option name="height" value="689" />
+    <option name="x" value="8" />
+    <option name="y" value="16" />
+    <option name="width" value="1077" />
+    <option name="height" value="551" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -303,15 +301,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14937212" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16815476" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3286119" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3797054" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39934534" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -467,22 +464,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fts_stream.py">
+    <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="148" column="51" selection-start-line="148" selection-start-column="47" selection-end-line="148" selection-end-column="51" />
+        <state relative-caret-position="42">
+          <caret line="67" column="70" selection-start-line="67" selection-start-column="70" selection-end-line="67" selection-end-column="70" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
+    <entry file="file://$PROJECT_DIR$/fts_stream.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="57" column="9" lean-forward="true" selection-start-line="57" selection-start-column="9" selection-end-line="57" selection-end-column="9" />
+        <state relative-caret-position="91">
+          <caret line="147" column="96" lean-forward="true" selection-start-line="147" selection-start-column="96" selection-end-line="147" selection-end-column="96" />
           <folding>
-            <element signature="e#0#28#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
