@@ -70,7 +70,7 @@ def forecast_weighted_average_t_sets(x, rule_base, alpha_cut, partitions, nsets,
     # Find rules with pertinence > 0
     rules = list(product(*l_sets))
 
-    # print(rules)
+    print(rules)
 
     consequents = []
     for r in rules:
@@ -81,11 +81,18 @@ def forecast_weighted_average_t_sets(x, rule_base, alpha_cut, partitions, nsets,
         c = [rule_base[0][index][len(rule_base[0][index]) - 1]] \
             if not rule_base[1][index] else rule_base[1][index]
 
+        print('--------------------')
+        print('{} -> {}'.format(rule_base[0][index], c))
         c = [partitions[i][1] for i in c]
+        print(c)
 
         consequents.append(np.mean(c))
+        print(rule_base[1][index])
+
 
     pertinences = [np.prod(e) for e in list(product(*l_ps))]
+
+    print(consequents)
 
     forecast = x[len(x) - 1]
     if consequents:

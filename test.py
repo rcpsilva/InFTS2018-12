@@ -51,7 +51,7 @@ cfts_forecast = cfts.predict(data)
 
 # ifts = IncMuSigmaRuleDeletionFTS(nsets=nsets, order=order, deletion=False, bound_type='mu-sigma')
 # ifts = TimeVariantAdaptiveFTS(nsets=nsets, order=order, bound_type='mu-sigma')
-ifts = StreamAdaptiveWindowFTS(nsets=nsets, order=order, bound_type='mu-sigma', update_type='translate', deletion=False)
+ifts = StreamAdaptiveWindowFTS(nsets=nsets, order=order, bound_type='mu-sigma', update_type='translate', deletion=True)
 # ifts = TimeVariantAdaptiveFTS(nsets=nsets, order=order, bound_type='min-max')
 ifts_forecast = []
 samples_so_far = 0

@@ -136,6 +136,7 @@ class StreamAdaptiveWindowFTS(FTS):
         up_partitions = self.partitions + [old_partitions[i] for i in range(len(f)) if f[i] < 0]
         up_partitions = sorted(up_partitions, key=lambda n_p: n_p[1])
         self.partitions = up_partitions
+        self.nsets = len(self.partitions)
 
         # 4) Compute the mappings required to update the rule base
         map_old_new = fuzzify_x_list_t(old_centers, self.partitions)
