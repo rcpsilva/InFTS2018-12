@@ -74,3 +74,15 @@ def plot_pertinence(partitions):
         y = [t_pertinence(xi, partitions[i]) * 20 - 20 for xi in x]
         plt.plot(y, x)
 
+
+def plot_partitions_data(partitions):
+
+    xs = []
+    ys = []
+    x = np.arange(min(list(map(min, partitions))), max(list(map(max, partitions))), 0.01)
+    for i in range(len(partitions)):
+        y = [t_pertinence(xi, partitions[i]) * 20 - 20 for xi in x]
+        xs.append(x)
+        ys.append(y)
+
+    return [xs, ys]
