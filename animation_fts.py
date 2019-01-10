@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from fts_concrete import ConcreteFTS
 from fts_stream import StreamAdaptiveWindowFTS
+from fts_incremental_rule_deletion import IncMuSigmaRuleDeletionFTS
 
 #Fts order
 order = 3
@@ -30,8 +31,8 @@ line2, = ax.plot([], [], lw=2)
 lines.append(line)
 lines.append(line2)
 
-ifts = StreamAdaptiveWindowFTS(nsets=nsets, order=order, bound_type='mu-sigma', update_type='retrain', deletion=True)
-
+# ifts = StreamAdaptiveWindowFTS(nsets=nsets, order=order, bound_type='mu-sigma', update_type='retrain', deletion=False)
+ifts = IncMuSigmaRuleDeletionFTS(nsets=nsets, order=order, deletion=True, bound_type='mu-sigma')
 
 # initialization function: plot the background of each frame
 def init():
@@ -90,6 +91,6 @@ anim = animation.FuncAnimation(fig, animate, init_func=init,
 # the video can be embedded in html5.  You may need to adjust this for
 # your system: for more information, see
 # http://matplotlib.sourceforge.net/api/animation_api.html
-anim.save('incremental_fts.html', fps=30, extra_args=['-vcodec', 'libx264'])
-
-plt.show()
+plt.rcParams['animation.ffmpeg_path'] = 'C:/Program Files/FFmpeg/ffmpeg-20190102-54109b1-win64-static/bin/ffmpeg'
+FFwriter = animation.FFMpegWriter(fps=30, extra_args=['-vcodec', 'libx264'])
+anim.save('ifts_v4.mp4', writer=FFwriter)
