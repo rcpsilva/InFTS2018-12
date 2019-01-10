@@ -65,16 +65,19 @@ class StreamAdaptiveWindowFTS(FTS):
                 self.clean_up(x)
 
             # Remove one window
-            r1_window = self.window[:]
-            r1_window.pop(0)
-            r1_window.pop(1)
-            r1_window.append(x)
+            if len(self.window) > 2:
+                r1_window = self.window[:]
+                r1_window.pop(0)
+                r1_window.pop(1)
+                r1_window.append(x)
 
-            if len(r1_window) > self.window_size:
-                self.fit(r1_window)
-                self.r1_forecast = forecast_weighted_average_t_sets(r1_window[len(r1_window)-self.order:],
-                                                                    self.rule_base, self.alpha_cut, self.partitions,
-                                                                    self.nsets, self.order)
+                if len(r1_window) > self.window_size:
+                    self.fit(r1_window)
+                    self.r1_forecast = forecast_weighted_average_t_sets(r1_window[len(r1_window)-self.order:],
+                                                                        self.rule_base, self.alpha_cut, self.partitions,
+                                                                        self.nsets, self.order)
+            else:
+                self.r1_forecast = x
 
             # Constant size window
             c_window = self.window[:]
