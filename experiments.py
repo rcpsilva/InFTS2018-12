@@ -1,3 +1,7 @@
+from builtins import len
+from builtins import dict
+from builtins import open
+
 import pertinence_funcs as pf
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,12 +15,12 @@ import pandas as pd
 import pickle
 import time
 from tqdm import tqdm
-
+import scipy.stats as ss
 
 # Configurations
-order = [1, 2, 3]
+order = [3, 2, 1]
 nsets = [3, 5, 7, 9]
-series = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+series = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
 
 inc_par_deletion = [True, False]
 inc_par_bound_type = ['mu-sigma', 'min-max']
@@ -30,32 +34,43 @@ def get_exp_data(_fts, _y, _s, _n, _o, _alg_name, up_type, _del_par, _b_par):
         forecasts.append(_fts.predict(yt))
     elapsed_time = time.process_time() - tt
 
-    y = np.array(_y)
-    forecasts = np.array(forecasts)
-    rmse = np.sqrt(np.sum((y[1:] - forecasts[0:len(y)]) ** 2) / len(y))
-    mape = np.mean(np.abs((y - forecasts) / y))
-    u_metric = np.mean(np.abs((y[0:-2] - y[2:]))) / np.mean(np.abs(y[1:] - forecasts[0:len(y)]))
+    if len(np.shape(forecasts)) > 1:
+        _y = [temp[0] for temp in _y]
 
-    di = dict(series=_s,
-              algrorithm=_alg_name,
-              order=_o,
-              nsets=_n,
-              f_nsets = fts.nsets,
-              update_type=up_type,
-              deletion=_del_par,
-              window_size=fts.window_size,
-              bound_type=_b_par,
+    _y = np.array(_y)
+    forecasts = np.array(forecasts)
+
+    rmse = np.sqrt(np.sum((_y[1:] - forecasts[:-1]) ** 2) / len(forecasts))
+    mape = np.mean(np.abs((_y[1:] - forecasts[:-1])/_y[1:]))
+    corr_p = ss.pearsonr(_y[1:], forecasts[:-1])
+    corr_s = ss.spearmanr(_y[1:], forecasts[:-1])
+    u_metric = np.mean(np.abs((_y[0:-2] - _y[2:]))) / np.mean(np.abs(_y[1:] - forecasts[0:-1]))
+
+    di = dict(series=[_s],
+              algrorithm=[_alg_name],
+              order=[_o],
+              nsets=[_n],
+              f_nsets=[fts.nsets],
+              update_type=[up_type],
+              deletion=[_del_par],
+              window_size=[len(fts.window)],
+              bound_type=[_b_par],
               ##################################
-              RMSE=rmse,
-              MAPE=mape,
-              U=u_metric,
+              pearson=[corr_p[0]],
+              spearman=[corr_s[0]],
+              RMSE=[rmse],
+              MAPE=[mape],
+              U=[u_metric],
               ##################################
-              time=elapsed_time)
+              time=[elapsed_time])
 
     return di
 
 
+# df = pd.read_csv('test_corr_2019-01-15.csv')  # pd.DataFrame()
+# print(df.head())
 df = pd.DataFrame()
+
 
 for s in tqdm(series):
     f_name = 'series_{}.pkl'.format(s)
@@ -67,7 +82,6 @@ for s in tqdm(series):
         for n in tqdm(nsets):
 
             #  Incremental
-            print('incremental')
             for del_par in inc_par_deletion:
                 for b_par in inc_par_bound_type:
 
@@ -82,7 +96,6 @@ for s in tqdm(series):
                     df.to_csv('test.csv')
 
             #  Sliding Window
-            print('sliding window')
             for del_par in inc_par_deletion:
                 for b_par in inc_par_bound_type:
                     del_str = 'delon' if del_par else 'deloff'
@@ -94,4 +107,4 @@ for s in tqdm(series):
                     d = get_exp_data(fts, y, s, n, o, alg_name, 'retrain', del_par, b_par)
 
                     df = pd.DataFrame(d).append(df, ignore_index=True)
-                    df.to_csv('test.csv')
+                    df.to_csv('test_corr_2019-01-15.csv')
