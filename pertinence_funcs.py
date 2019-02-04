@@ -67,11 +67,11 @@ def fuzzify_x_list_t(x, partitions):
     return f_list
 
 
-def plot_pertinence(partitions):
+def plot_pertinence(partitions, offset=20):
 
     x = np.arange(min(list(map(min, partitions))), max(list(map(max, partitions))), 0.01)
     for i in range(len(partitions)):
-        y = [t_pertinence(xi, partitions[i]) * 20 - 20 for xi in x]
+        y = [t_pertinence(xi, partitions[i]) * offset - offset for xi in x]
         plt.plot(y, x)
 
 
