@@ -13,7 +13,7 @@ class IncMuSigmaRuleDeletionFTS(FTS):
 
     """
 
-    def __init__(self, nsets, order, deletion, bound_type='min-max'):
+    def __init__(self, nsets, order, deletion, bound_type='min-max', translation_threshold=0.5):
 
         self.deletion = deletion
         self.nsets = nsets
@@ -33,14 +33,16 @@ class IncMuSigmaRuleDeletionFTS(FTS):
         self.min_val = 0
         self.max_val = 0
 
+        self.translation_threshold = translation_threshold
+
         self.bound_type = bound_type
 
     def fit(self, data):
 
         if self.bound_type == 'min-max':
             data_range = self.max_val - self.min_val
-            lb = self.min_val - data_range*0.5
-            ub = self.max_val + data_range * 0.5
+            lb = self.min_val - data_range * 0.1
+            ub = self.max_val + data_range * 0.1
         else:  # self.bound_type == 'mu_sigma'
             lb = self.mu - self.sigma * self.sigma_multiplier
             ub = self.mu + self.sigma * self.sigma_multiplier
@@ -55,15 +57,16 @@ class IncMuSigmaRuleDeletionFTS(FTS):
 
         # 2) Verify the pertinence of the old sets centers with respect to the new partitions
         old_centers = [p[1] for p in old_partitions]
-        f = fuzzify_x_list_t(old_centers, self.partitions)
+        f = fuzzify_x_list_t(old_centers, self.partitions, self.translation_threshold)
 
         # 3) Compute the final set of partitions
         up_partitions = self.partitions + [old_partitions[i] for i in range(len(f)) if f[i] < 0]
         up_partitions = sorted(up_partitions, key=lambda n_p: n_p[1])
         self.partitions = up_partitions
+        self.nsets = len(self.partitions)
 
         # 4) Compute the mappings required to update the rule base
-        map_old_new = fuzzify_x_list_t(old_centers, self.partitions)
+        map_old_new = fuzzify_x_list_t(old_centers, self.partitions, self.translation_threshold)
 
         # 5) Update rules
         self.rule_base = rbm.update_rule_base(self.rule_base, map_old_new, np.arange(len(self.partitions)), self.order)

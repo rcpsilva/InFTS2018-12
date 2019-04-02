@@ -45,12 +45,13 @@ def t_pertinence_list(lx, partitions):
     return pertinence_list
 
 
-def fuzzify_x_list_t(x, partitions):
-    """ Fuzzifies a list of points given a set o triangular partitions
+def fuzzify_x_list_t(x, partitions, fuzz_threshold=0.5):
+    """ Fuzzifies a list of points given a set o triangular partitions and a threshold
 
         Args:
             x: list point
             partitions: list triangular fuzzy sets partitions
+            fuzz_threshold: fuzzification threshold
         Returns:
             f_list: list of fuzzified values
     """
@@ -59,7 +60,7 @@ def fuzzify_x_list_t(x, partitions):
 
     for xi in x:
         p_list = t_pertinence_list([xi], partitions)
-        if np.max(p_list[0]) > 0.5:
+        if np.max(p_list[0]) > fuzz_threshold:
             f_list.append(np.argmax(p_list[0]))
         else:
             f_list.append(-1)  # No fuzzy set represents the value

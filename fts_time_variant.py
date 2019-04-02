@@ -22,6 +22,7 @@ class TimeVariantFTS(FTS):
         self.alpha_cut = 0
         self.window_size = window_size
 
+        self.sigma_multiplier = 2.698
         self.bound_type = bound_type
 
     def fit(self, data):
@@ -31,8 +32,8 @@ class TimeVariantFTS(FTS):
         # Regenerate partitions
         data_range = np.max(data) - np.min(data)
         if self.bound_type == 'min-max':
-            self.partitions = pu.generate_t_partitions(self.nsets, np.min(data) - data_range*0.5,
-                                                       np.max(data) + data_range*0.5)
+            self.partitions = pu.generate_t_partitions(self.nsets, np.min(data) - data_range*0.1,
+                                                       np.max(data) + data_range*0.1)
         else:  # self.bound_type == 'mu-sigma'
             self.partitions = pu.generate_t_partitions(self.nsets, np.mean(data) - np.std(data) * self.sigma_multiplier,
                                                        np.mean(data) + np.std(data) * self.sigma_multiplier)

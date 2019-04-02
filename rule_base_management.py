@@ -70,6 +70,7 @@ def add_rule(rule_base, rule, nsets, order):
     # Update consequent
     consequents[index].add(rule[1])
 
+
     # Return the updated rule base
     rule_base = [antecedents, consequents]  # Not sure if this is needed
     return rule_base
@@ -88,7 +89,7 @@ def update_rule_base(rule_base, map_old_new, new_fuzzy_sets, order):
 
     """
 
-    if any(list(map(eq, map_old_new, list(range(len(map_old_new)))))):  # Check if any translation is needed
+    if not (map_old_new == list(range(len(map_old_new)))):  # Check if any translation is needed
 
         new_rule_base = init_rule_base(new_fuzzy_sets, order)
 

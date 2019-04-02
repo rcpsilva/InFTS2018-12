@@ -13,7 +13,7 @@ class StreamAdaptiveWindowFTS(FTS):
 
     """
 
-    def __init__(self, nsets, order, bound_type='min-max', update_type='retrain', deletion=False):
+    def __init__(self, nsets, order, bound_type='min-max', update_type='retrain', deletion=False, max_window_size=None):
 
         self.nsets = nsets
         self.order = order
@@ -34,6 +34,8 @@ class StreamAdaptiveWindowFTS(FTS):
         self.update_type = update_type  # ('retrain'/'translate')
         self.deletion = deletion
         self.last_forecast = None
+
+        self.max_window_size = max_window_size
 
     def fit(self, data):
         if self.update_type == 'retrain':
@@ -102,6 +104,9 @@ class StreamAdaptiveWindowFTS(FTS):
             elif champion == 0:
                 forecast = self.i1_forecast
                 self.window = i1_window[:]
+                if self.max_window_size:
+                    if len(self.window) > self.max_window_size:
+                        self.window = self.window[1:]
             else:
                 forecast = self.c_forecast
                 self.window = c_window[:]
@@ -165,8 +170,8 @@ class StreamAdaptiveWindowFTS(FTS):
         data_range = np.max(data) - np.min(data)
 
         if self.bound_type == 'min-max':
-            self.partitions = pu.generate_t_partitions(self.nsets, np.min(data) - data_range * 0.5,
-                                                       np.max(data) + data_range * 0.5)
+            self.partitions = pu.generate_t_partitions(self.nsets, np.min(data) - data_range * 0.1,
+                                                       np.max(data) + data_range * 0.1)
         else:  # self.bound_type == 'mu-sigma'
             self.partitions = pu.generate_t_partitions(self.nsets, np.mean(data) - np.std(data) * self.sigma_multiplier,
                                                        np.mean(data) + np.std(data) * self.sigma_multiplier)
