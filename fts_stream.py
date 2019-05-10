@@ -5,7 +5,7 @@ import pertinence_funcs as pf
 import numpy as np
 from forecast_funcs import forecast_weighted_average_t_sets
 from pertinence_funcs import fuzzify_x_list_t
-from forecast_funcs import find_unappropriate_rules
+from forecast_funcs import find_inappropriate_rules
 
 
 class StreamAdaptiveWindowFTS(FTS):
@@ -94,7 +94,7 @@ class StreamAdaptiveWindowFTS(FTS):
             i1_window = self.window[:]
             i1_window.append(x)
 
-            self.fit(c_window)
+            self.fit(i1_window)
             self.i1_forecast = forecast_weighted_average_t_sets(i1_window[len(i1_window)-self.order:], self.rule_base,
                                                                 self.alpha_cut, self.partitions, self.nsets, self.order)
 
@@ -195,7 +195,7 @@ class StreamAdaptiveWindowFTS(FTS):
             if self.partitions and (fuzzify_x_list_t([x], self.partitions)[0] !=
                                     fuzzify_x_list_t([self.last_forecast], self.partitions)[0]):
                 # Otherwise, find and remove the unappropriate rules
-                un_rules = find_unappropriate_rules(self.window[(len(self.window)-self.order):], self.alpha_cut,
+                un_rules = find_inappropriate_rules(self.window[(len(self.window)-self.order):], self.alpha_cut,
                                                     self.partitions, self.nsets, self.order)
                 for u_r in un_rules:
                     self.rule_base[1][u_r] = set()

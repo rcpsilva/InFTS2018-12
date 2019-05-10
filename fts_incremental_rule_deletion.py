@@ -5,7 +5,7 @@ import pertinence_funcs as pf
 import numpy as np
 from forecast_funcs import forecast_weighted_average_t_sets
 from pertinence_funcs import fuzzify_x_list_t
-from forecast_funcs import find_unappropriate_rules
+from forecast_funcs import find_inappropriate_rules
 
 
 class IncMuSigmaRuleDeletionFTS(FTS):
@@ -60,7 +60,7 @@ class IncMuSigmaRuleDeletionFTS(FTS):
         f = fuzzify_x_list_t(old_centers, self.partitions, self.translation_threshold)
 
         # 3) Compute the final set of partitions
-        up_partitions = self.partitions + [old_partitions[i] for i in range(len(f)) if f[i] < 0]
+        up_partitions = self.partitions  + [old_partitions[i] for i in range(len(f)) if f[i] < 0]
         up_partitions = sorted(up_partitions, key=lambda n_p: n_p[1])
         self.partitions = up_partitions
         self.nsets = len(self.partitions)
@@ -96,7 +96,7 @@ class IncMuSigmaRuleDeletionFTS(FTS):
                 if self.partitions and (fuzzify_x_list_t([x], self.partitions)[0] !=
                                         fuzzify_x_list_t([self.last_forecast], self.partitions)[0]):
                     # Otherwise, find and remove the unappropriate rules
-                    un_rules = find_unappropriate_rules(self.window[1:], self.alpha_cut,
+                    un_rules = find_inappropriate_rules(self.window[1:], self.alpha_cut,
                                                         self.partitions, self.nsets, self.order)
                     for u_r in un_rules:
                         self.rule_base[1][u_r] = set()

@@ -4,7 +4,7 @@ import numpy as np
 import warnings
 
 
-def find_unappropriate_rules(x, alpha_cut, partitions, nsets, order):
+def find_inappropriate_rules(x, alpha_cut, partitions, nsets, order):
     un_rules = []
 
     # Find matching rules
