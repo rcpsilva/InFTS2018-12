@@ -11,7 +11,7 @@ class TimeVariantFTS(FTS):
 
     """
 
-    def __init__(self, nsets, order, window_size, bound_type='min-max'):
+    def __init__(self, nsets, order, window_size, bound_type='min-max', partitionner='uniform'):
 
         self.nsets = nsets
         self.order = order
@@ -25,18 +25,27 @@ class TimeVariantFTS(FTS):
         self.sigma_multiplier = 2.698
         self.bound_type = bound_type
 
+        self.partitionner = partitionner
+
     def fit(self, data):
         # Resets the rule base
         self.rule_base = rbm.init_rule_base(self.fuzzy_sets, self.order)
 
-        # Regenerate partitions
+        # Compute the universe of discourse
         data_range = np.max(data) - np.min(data)
         if self.bound_type == 'min-max':
-            self.partitions = pu.generate_t_partitions(self.nsets, np.min(data) - data_range*0.1,
-                                                       np.max(data) + data_range*0.1)
+            lb = np.min(data) - data_range * 0.1
+            ub = np.max(data) + data_range * 0.1
         else:  # self.bound_type == 'mu-sigma'
-            self.partitions = pu.generate_t_partitions(self.nsets, np.mean(data) - np.std(data) * self.sigma_multiplier,
-                                                       np.mean(data) + np.std(data) * self.sigma_multiplier)
+            lb = np.mean(data) - np.std(data) * self.sigma_multiplier
+            ub = np.mean(data) + np.std(data) * self.sigma_multiplier
+
+        # Regenerate partitions
+
+        if self.partitionner == 'uniform':
+            self.partitions = pu.generate_t_partitions(self.nsets, lb, ub)
+        else:  # self.bound_type == 'knn'
+            self.partitions = pu.generate_t_partitions_knn(data, self.nsets, lb, ub)
 
         # Populate the rule base
         for i in range(len(data)-self.order):

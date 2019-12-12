@@ -157,6 +157,8 @@ class FinalIncrementalFTS(FTS):
 
         self.last_forecast = []
 
+        self.delete_count = 0
+
     def translate(self):
 
         old_partitions = self.partitions[:]
@@ -187,6 +189,8 @@ class FinalIncrementalFTS(FTS):
             # Otherwise, find and remove the unappropriate rules
             un_rules = ff.find_inappropriate_rules(self.window[1:], self.alpha_cut,
                                                    self.partitions, self.nsets, self.order)
+
+            self.delete_count += len(un_rules)
             for u_r in un_rules:
                 self.rule_base[1][u_r] = set()
 
